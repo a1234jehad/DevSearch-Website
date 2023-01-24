@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-$jl!imsjpg823t8(uq5jzjd!#7y*h1fxa@5fb%ljlss2ey_)3d"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -211,7 +211,7 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_QUERYSTRING_AUTH = False
 
 
-if os.getcwd() == '/app':
-    DEBUG = False
-else:
-    DEBUG = True
+# if os.getcwd() == '/app':
+#     DEBUG = False
+# else:
+#     DEBUG = True
