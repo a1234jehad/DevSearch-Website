@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-$jl!imsjpg823t8(uq5jzjd!#7y*h1fxa@5fb%ljlss2ey_)3d"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','devsearchproject.herokuapp.com']
 
 
 # Application definition
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
 
     "projects.apps.ProjectsConfig",
     "users.apps.UsersConfig",
+
+    'rest_framework',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -74,6 +77,48 @@ TEMPLATES = [
         },
     },
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+
+from datetime import timedelta
+...
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
 
 WSGI_APPLICATION = "devsearchproject.wsgi.application"
 
@@ -81,13 +126,22 @@ WSGI_APPLICATION = "devsearchproject.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": 'devsearch',
+        "USER": 'postgres',
+        "PASSWORD": os.environ["POSTGRES"],
+        "HOST": 'database-1.ckvr0kpjhmwy.us-east-1.rds.amazonaws.com',
+        "PORT": '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -146,3 +200,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'static/images')
 
 # To handle where static files in production
 STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_ACCESS_KEY_ID ='AKIARKZVKLQ4YR27QZZX'
+AWS_SECRET_ACCESS_KEY = os.environ["KEY_S3"]
+AWS_STORAGE_BUCKET_NAME = 'devseach-bucket'
+AWS_S3_REGION_NAME = 'eu-west-3' 
+AWS_S3_SIGNATURE_VERSION = 's3v4' 
+AWS_S3_FILE_OVERWRITE = False 
+AWS_QUERYSTRING_AUTH = False
+
+
+if os.getcwd() == '/app':
+    DEBUG = False
+else:
+    DEBUG = True

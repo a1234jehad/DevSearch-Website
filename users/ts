@@ -1,3 +1,2 @@
 import os
-
-print(os.environ)
+print(os.environ["KEY_S3"])
