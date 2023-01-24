@@ -138,7 +138,7 @@ DATABASES = {
         "NAME": 'devsearch',
         "USER": 'postgres',
         "PASSWORD": os.environ["POSTGRES"],
-        "HOST": 'database-1.ckvr0kpjhmwy.us-east-1.rds.amazonaws.com',
+        "HOST": os.environ["DB_HOST"],
         "PORT": '5432',
     }
 }
