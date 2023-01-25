@@ -212,7 +212,7 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_QUERYSTRING_AUTH = False
 
 
-# if os.getcwd() == '/app':
-#     DEBUG = False
-# else:
-#     DEBUG = True
+if os.getcwd() == '/app':
+    DEBUG = False
+else:
+    DEBUG = True
